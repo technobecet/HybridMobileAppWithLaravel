@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pl">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -33,16 +33,31 @@
             <a class="navbar-brand" href="./">Home</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
+        @auth
             <ul class="nav navbar-nav">
                 <li><p class="navbar-text">Logged in as:</p></li>
-                <li><p class="navbar-text">Robert</p></li>
+                <li><p class="navbar-text">{{ Auth::user()->name }}</p></li>
                 <li><a href="{{ route('adminHome') }}">admin</a></li>
-                <li><a href="#contact">logout</a></li>
+
+                <li>
+                    <a class="dropdown-item" href="{{ route('logout') }}"
+                       onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                        Logout
+                    </a>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        {{ csrf_field() }}
+                    </form>
+                </li>
+
             </ul>
+        @endauth
+        @guest
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">Sign in</a></li>
-                <li><a href="#">Sign up</a></li>
+                <li><a href="{{ route('login') }}">Sign in</a></li>
+                <li><a href="{{ route('register') }}">Sign up</a></li>
             </ul>
+        @endguest
         </div><!--/.nav-collapse -->
     </div>
 </nav>
@@ -77,6 +92,8 @@
                 </select>
             </div>
             <button type="submit" class="btn btn-warning">Search</button>
+
+            <!-- deleted <input type="hidden" name="view" value="roomsearch"> -->
 
         </form>
 
@@ -121,3 +138,4 @@
 <script src="{{ asset('js/app.js') }}"></script>
 </body>
 </html>
+

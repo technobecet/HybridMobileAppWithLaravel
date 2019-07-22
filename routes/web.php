@@ -20,7 +20,7 @@ Route::get(trans('routes.person'),'FrontendController@person')->name('person');
 
 
 
-Route::group(['prefix'=>'admin'],function(){
+Route::group(['prefix'=>'admin','middleware'=>'auth'],function(){
 
     Route::get('/','BackendController@index')->name('adminHome');
     Route::get(trans('routes.myobjects'),'BackendController@myobjects')->name('myObjects');
@@ -31,3 +31,8 @@ Route::group(['prefix'=>'admin'],function(){
 
 
 });
+
+
+Auth::routes();
+
+//Route::get('/home', 'HomeController@index')->name('home');
