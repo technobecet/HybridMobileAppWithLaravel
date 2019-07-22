@@ -20,62 +20,57 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.*/
 
-
-$(function () {
-    $(".datepicker").datepicker();
-});
-
-
-$(function () {
-    $(".autocomplete").autocomplete({
-        source: ["London", "New York", "Warsaw", "Berlin", "Auckland", "Johannesburg", "Dubai"],
-        minLength: 2,
-        select: function (event, ui) {
-            
-//            console.log(ui.item.value);
-        }
-
-
-    });
-});
-
-
-
-//room.php
 var eventDates = {};
-var dates = ['02/15/2019', '02/16/2019', '02/25/2019'];
-for (var i = 0; i <= dates.length; i++)
+var datesConfirmed = ['02/12/2019', '02/15/2019', '02/23/2019'];
+var datesnotConfirmed = ['02/13/2019', '02/14/2019', '02/20/2019', '02/21/2019'];
+
+
+
+for (var i = 0; i < datesConfirmed.length; i++)
 {
-    eventDates[ new Date(dates[i])] = new Date(dates[i]);
+    eventDates[ datesConfirmed[i] ] = 'confirmed';
+}
+
+var tmp = {};
+for (var i = 0; i < datesnotConfirmed.length; i++)
+{
+    tmp[ datesnotConfirmed[i] ] = 'notconfirmed';
 }
 
 
+Object.assign(eventDates, tmp);
+
+
 $(function () {
-    $("#avaiability_calendar").datepicker({
+    $(".reservation_calendar").datepicker({
         onSelect: function (data) {
 
-//            console.log($('#checkin').val());
+            var a = $(this).attr('id');
 
-            if ($('#checkin').val() == '')
-            {
-                $('#checkin').val(data);
-            } else if ($('#checkout').val() == '')
-            {
-                $('#checkout').val(data);
-            } else if ($('#checkout').val() != '')
-            {
-                $('#checkin').val(data);
-                $('#checkout').val('');
-            }
+            $('.hidden_' + a).hide();
+            $('.loader_' + a).show();
+
+            setTimeout(function () {
+
+                $('.loader_' + a).hide();
+                $('.hidden_' + a).show();
+
+            }, 1000);
 
         },
         beforeShowDay: function (date)
         {
-            //console.log(date);
-            if (eventDates[date])
-                return [false, 'unavaiable_date'];
-            else
-                return [true, ''];
+            var tmp = eventDates[ $.datepicker.formatDate('mm/dd/yy', date)];
+//            console.log(tmp);
+            if (tmp)
+            {
+                if (tmp == 'confirmed')
+                    return [true, 'reservationconfirmed'];
+                else
+                    return [true, 'reservationnotconfirmed'];
+            } else
+                return [false, ''];
+
         }
 
 
