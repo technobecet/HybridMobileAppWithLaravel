@@ -38,9 +38,11 @@ class FrontendController extends Controller
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function object()
+    public function object($id)
     {
-        return view('frontend.object');
+        $object = $this->fR->getObject($id);
+        //dd($object);
+        return view('frontend.object', ['object' => $object]);
     }
 
     /**

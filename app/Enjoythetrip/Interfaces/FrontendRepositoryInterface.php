@@ -6,4 +6,5 @@ interface FrontendRepositoryInterface {
 
     public function getObjectsForMainPage();
 
+    public function getObject($id);
 }
